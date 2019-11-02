@@ -1,4 +1,4 @@
-public class Tuple {
+public class Node {
 	enum Orientation {S, H, V}
 
 	public int r, c, orientation, moveCost;
@@ -6,7 +6,7 @@ public class Tuple {
 	public State prev;
 	public int heuristicCost = 0;
 
-	public Tuple(int _r, int _c, Orientation _orient, int _cost, char _dir, State _st) {
+	public Node(int _r, int _c, Orientation _orient, int _cost, char _dir, State _st) {
 		r = _r;
 		c = _c;
 		orientation = _orient.ordinal();
@@ -20,7 +20,7 @@ public class Tuple {
 	}
 
 	//TODO: remove that one
-	public void printTuple(){
+	public void printNode(){
 		System.out.println("Direction:" + direction + " Coords:" + Integer.toString(r) + "," +
 				Integer.toString(c) + " Orientation:" + Integer.toString(orientation) + " Cost:" +
 				Integer.toString(moveCost));

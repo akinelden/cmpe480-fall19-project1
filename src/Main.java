@@ -43,9 +43,9 @@ public class Main {
 				String s = scanner.nextLine();
 				String[] coords = s.split(" ");
 				State st = new State(Integer.parseInt(coords[0]), Integer.parseInt(coords[1]), Integer.parseInt(coords[2]));
-				ArrayList<Tuple> successors = puzzle.getSuccessors(st);
-				for (Tuple suc : successors) {
-					suc.printTuple();
+				ArrayList<Node> successors = puzzle.getSuccessors(st);
+				for (Node suc : successors) {
+					suc.printNode();
 				}
 			} catch (Exception ex1) {
 				System.out.println("Wrong input given!");
