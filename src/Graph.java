@@ -41,7 +41,6 @@ public class Graph {
 				continue;
 			}
 			st.exploreNode(nd.prev, nd.direction, nd.moveCost);
-			System.out.println(nd.direction+" " +nd.r+" "+nd.c + " "+nd.orientation); //TODO: remove that line(test)
 			maxDepth = Math.max(maxDepth, st.getDepth());
 			if (puzzle.checkGoalState(st)) {
 				outputSearchResult(st);
@@ -64,6 +63,10 @@ public class Graph {
 		}
 	}
 
+	private void calculateHeuristicCost(Node t) {
+		t.setHeuristicCost(Math.abs(puzzle.getGoalState()[0] - t.r) + Math.abs(puzzle.getGoalState()[1] - t.c));
+	}
+
 	private void informedSearch(PriorityQueue<Node> queue){
 		Node initNd = initializeStateGraph();
 		calculateHeuristicCost(initNd);
@@ -75,7 +78,6 @@ public class Graph {
 				continue;
 			}
 			st.exploreNode(nd.prev, nd.direction, nd.moveCost);
-			//System.out.println(nd.direction+" " +nd.r+" "+nd.c + " "+nd.orientation); //TODO: remove that line(test)
 			maxDepth = Math.max(maxDepth, st.getDepth());
 			if (puzzle.checkGoalState(st)) {
 				outputSearchResult(st);
@@ -104,17 +106,6 @@ public class Graph {
 	}
 
 	public void UCS() {
-		// TODO: decide on comparators
-		/*Comparator<Tuple> ucsComparator = new Comparator<Tuple>() {
-			@Override
-			public int compare(Tuple t1, Tuple t2) {
-				int diff = t1.prev.getPathCost() + t1.moveCost - (t2.prev.getPathCost() + t2.moveCost);
-				if (diff == 0) {
-					return getDirectionInt(t1) - getDirectionInt(t2);
-				}
-				return diff;
-			}
-		};*/
 		Comparator<Node> ucsComparator = Comparator.comparingInt(t -> (t.prev.getPathCost() + t.moveCost));
 		SortedList<Node> queue = new SortedList<>(ucsComparator);
 		uninformedSearch(queue, true);
@@ -124,79 +115,11 @@ public class Graph {
 		Comparator<Node> aStarComparator = Comparator.comparingInt(t -> (t.prev.getPathCost() + t.moveCost + t.heuristicCost));
 		PriorityQueue<Node> queue = new PriorityQueue<>(aStarComparator);
 		informedSearch(queue);
-		/*Tuple initTp = initializeStateGraph();
-		calculateHeuristicCost(initTp);
-		queue.add(initTp);
-		while (queue.size() > 0) {
-			Tuple tp = queue.poll();
-			State st = stateGraph[tp.r][tp.c][tp.orientation];
-			if (st.isVisited()) {
-				continue;
-			}
-			st.exploreNode(tp.prev, tp.direction, tp.moveCost);
-			maxDepth = Math.max(maxDepth, st.getDepth());
-			if (puzzle.checkGoalState(st)) {
-				outputSearchResult(st);
-				return;
-			}
-			ArrayList<Tuple> succs = puzzle.getSuccessors(st);
-			for (Tuple _t : succs) {
-				if (stateGraph[_t.r][_t.c][_t.orientation] == null) { // It means node is not explored and not in the queue
-					stateGraph[_t.r][_t.c][_t.orientation] = new State(_t.r, _t.c, _t.orientation);
-					//queue.addLast(_t);
-				}
-				calculateHeuristicCost(_t);
-				queue.add(_t);
-			}
-			totalExpanded++;
-		}*/
-		// TODO: implement
 	}
 
 	public void Greedy() {
 		Comparator<Node> greedyComparator = Comparator.comparingInt(t -> (t.heuristicCost));
 		PriorityQueue<Node> queue = new PriorityQueue<>(greedyComparator);
 		informedSearch(queue);
-		/*Tuple initTp = initializeStateGraph();
-		calculateHeuristicCost(initTp);
-		queue.add(initTp);
-		while (queue.size() > 0) {
-			Tuple tp = queue.poll();
-			State st = stateGraph[tp.r][tp.c][tp.orientation];
-			if (st.isVisited()) {
-				continue;
-			}
-			st.exploreNode(tp.prev, tp.direction, tp.moveCost);
-			maxDepth = Math.max(maxDepth, st.getDepth());
-			if (puzzle.checkGoalState(st)) {
-				outputSearchResult(st);
-				return;
-			}
-			ArrayList<Tuple> succs = puzzle.getSuccessors(st);
-			for (Tuple _t : succs) {
-				if (stateGraph[_t.r][_t.c][_t.orientation] == null) { // It means node is not explored and not in the queue
-					stateGraph[_t.r][_t.c][_t.orientation] = new State(_t.r, _t.c, _t.orientation);
-					//queue.addLast(_t);
-				}
-				calculateHeuristicCost(_t);
-				queue.add(_t);
-			}
-			totalExpanded++;
-		}*/
-		// TODO: implement
-	}
-
-	private int getDirectionInt(Node t) {
-		char[] directions = {'L', 'U', 'R', 'D'};
-		for (int i = 0; i < 4; i++) {
-			if (t.direction == directions[i]) {
-				return i;
-			}
-		}
-		return 0;
-	}
-
-	private void calculateHeuristicCost(Node t) {
-		t.setHeuristicCost(Math.abs(puzzle.getGoalState()[0] - t.r) + Math.abs(puzzle.getGoalState()[1] - t.c));
 	}
 }

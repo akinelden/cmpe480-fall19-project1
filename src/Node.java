@@ -18,11 +18,4 @@ public class Node {
 	public void setHeuristicCost(int hC){
 		heuristicCost = hC;
 	}
-
-	//TODO: remove that one
-	public void printNode(){
-		System.out.println("Direction:" + direction + " Coords:" + Integer.toString(r) + "," +
-				Integer.toString(c) + " Orientation:" + Integer.toString(orientation) + " Cost:" +
-				Integer.toString(moveCost));
-	}
 }

@@ -4,13 +4,12 @@ import java.util.Scanner;
 
 public class Main {
 	public static void main(String[] args) {
-		String level = "levels/level1.txt"; // TODO: remove them
-		String method = "bfs"; // TODO: remove them
+		String level = args[0]; // TODO: remove them
+		//String level = "levels/level1.txt"; // TODO: remove them
+		String method = args[1]; // TODO: remove them
+		//String method = "bfs"; // TODO: remove them
 
 		Puzzle puzzle = createPuzzle(level);
-
-		// TODO: remove below
-		//testPuzzle(puzzle);
 
 		Graph graph = new Graph(puzzle);
 
@@ -32,25 +31,6 @@ public class Main {
 				break;
 		}
 
-	}
-
-	// TODO: remove that test function
-	private static void testPuzzle(Puzzle puzzle) {
-		while (true) {
-			try {
-				System.out.println("Enter coordinates and orientation:");
-				Scanner scanner = new Scanner(System.in);
-				String s = scanner.nextLine();
-				String[] coords = s.split(" ");
-				State st = new State(Integer.parseInt(coords[0]), Integer.parseInt(coords[1]), Integer.parseInt(coords[2]));
-				ArrayList<Node> successors = puzzle.getSuccessors(st);
-				for (Node suc : successors) {
-					suc.printNode();
-				}
-			} catch (Exception ex1) {
-				System.out.println("Wrong input given!");
-			}
-		}
 	}
 
 	private static Puzzle createPuzzle(String level) {

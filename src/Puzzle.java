@@ -41,8 +41,8 @@ public class Puzzle {
 	}
 
 	public ArrayList<Node> getSuccessors(State st) {
-		// I assumed that when agent is in horizontal orientation, its location is represented by the left cell
-		// and when agent is in vertical orientation, its location is represented by the upper cell
+		// I assumed that when agent is in horizontal orientation, its location is represented by left occupied cell
+		// and when agent is in vertical orientation, its location is represented by upper occupied cell
 		int r = st.getR_coord();
 		int c = st.getC_coord();
 		int orient = st.getOrientation();
