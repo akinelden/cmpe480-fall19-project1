@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class Main {
 	public static void main(String[] args) {
 		String level = "levels/level1.txt"; // TODO: remove them
-		String method = "dfs"; // TODO: remove them
+		String method = "bfs"; // TODO: remove them
 
 		Puzzle puzzle = createPuzzle(level);
 
@@ -13,8 +13,7 @@ public class Main {
 		//testPuzzle(puzzle);
 
 		Graph graph = new Graph(puzzle);
-		graph.BFS();
-		//graph.DFS();
+
 		switch (method) {
 			case "dfs":
 				graph.DFS();

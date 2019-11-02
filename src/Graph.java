@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.PriorityQueue;
+import java.util.Comparator;
 
 public class Graph {
 
@@ -22,6 +24,15 @@ public class Graph {
 		return  initState;
 	}
 
+	private void outputSearchResult(State st){
+		System.out.println(st.getPathCost()+" "+totalExpanded+" "+maxDepth+" "+st.getDepth());
+		String solution = "";
+		while(st.getPred()!=null){
+			solution = st.getMove() + solution;
+			st = st.getPred();
+		}
+		System.out.println(solution);
+	}
 
 	public void DFS(){
 		State init = createInitialState();
@@ -37,12 +48,7 @@ public class Graph {
 			st.exploreNode(tp.prev, tp.direction, tp.moveCost);
 			maxDepth = Math.max(maxDepth, st.getDepth());
 			if(puzzle.checkGoalState(st)){
-				//TODO: implement goal reached method
-				State current = st;
-				while(current.getPred()!=null){
-					System.out.print(current.getMove());
-					current = current.getPred();
-				}
+				outputSearchResult(st);
 				return;
 			}
 			ArrayList<Tuple> succs = puzzle.getSuccessors(st);
@@ -72,12 +78,7 @@ public class Graph {
 			st.exploreNode(tp.prev, tp.direction, tp.moveCost);
 			maxDepth = Math.max(maxDepth, st.getDepth());
 			if (puzzle.checkGoalState(st)) {
-				//TODO: implement goal reached method
-				State current = st;
-				while (current.getPred() != null) {
-					System.out.print(current.getMove());
-					current = current.getPred();
-				}
+				outputSearchResult(st);
 				return;
 			}
 			ArrayList<Tuple> succs = puzzle.getSuccessors(st);
@@ -95,6 +96,33 @@ public class Graph {
 	}
 
 	public void UCS(){
+		Comparator<Tuple> ucsComparator = Comparator.comparingInt(t -> (t.prev.getPathCost() + t.moveCost));
+		PriorityQueue<Tuple> queue = new PriorityQueue<>(ucsComparator);
+		State init = createInitialState();
+		Tuple initTp = new Tuple(init.getR_coord(),init.getC_coord(),Tuple.Orientation.S,0,' ',null);
+		queue.add(initTp);
+		while(queue.size()>0) {
+			Tuple tp = queue.poll();
+			State st = stateGraph[tp.r][tp.c][tp.orientation];
+			if (st.isVisited()) {
+				continue;
+			}
+			st.exploreNode(tp.prev, tp.direction, tp.moveCost);
+			maxDepth = Math.max(maxDepth, st.getDepth());
+			if (puzzle.checkGoalState(st)) {
+				outputSearchResult(st);
+				return;
+			}
+			ArrayList<Tuple> succs = puzzle.getSuccessors(st);
+			for (Tuple _t : succs) {
+				if (stateGraph[_t.r][_t.c][_t.orientation] == null) { // It means node is not explored and not in the queue
+					stateGraph[_t.r][_t.c][_t.orientation] = new State(_t.r, _t.c, _t.orientation);
+					//queue.addLast(_t);
+				}
+				queue.add(_t);
+			}
+			totalExpanded++;
+		}
 		// TODO: implement
 	}
 
@@ -104,5 +132,9 @@ public class Graph {
 
 	public void Greedy(){
 		// TODO: implement
+	}
+
+	private void calculateHeuristicCost(Tuple t){
+
 	}
 }

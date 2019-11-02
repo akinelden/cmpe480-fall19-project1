@@ -4,6 +4,7 @@ public class Tuple {
 	public int r, c, orientation, moveCost;
 	public char direction;
 	public State prev;
+	public int heuristicCost = 0;
 
 	public Tuple(int _r, int _c, Orientation _orient, int _cost, char _dir, State _st) {
 		r = _r;
@@ -13,6 +14,11 @@ public class Tuple {
 		direction = _dir;
 		prev = _st;
 	}
+
+	public void setHeuristicCost(int hC){
+		heuristicCost = hC;
+	}
+
 	//TODO: remove that one
 	public void printTuple(){
 		System.out.println("Direction:" + direction + " Coords:" + Integer.toString(r) + "," +
