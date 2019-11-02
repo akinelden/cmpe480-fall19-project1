@@ -1,9 +1,9 @@
 import java.util.ArrayList;
 
 public class Puzzle {
-	private int[] initial_state, goal_state;
-	public int row, col;
-	public int[][] map;
+	private int[] initialState, goalState;
+	private int row, col;
+	private int[][] map;
 
 	public Puzzle(int _row, int _col, String[] _map) {
 		row = _row;
@@ -15,62 +15,80 @@ public class Puzzle {
 				if (ch != ' ') {
 					map[i][j] = 1;
 					if (ch == 's') {
-						initial_state = new int[]{i, j};
+						initialState = new int[]{i, j};
 					} else if (ch == 'g') {
-						goal_state = new int[]{i, j};
+						goalState = new int[]{i, j};
 					}
 				}
 			}
 		}
 	}
 
-	public ArrayList<Tuple> GetSuccessors(int r, int c, int orient) {
+	public int[] getInitialState() {
+		return initialState;
+	}
+
+	public int getRow() {
+		return row;
+	}
+
+	public int getCol() {
+		return col;
+	}
+
+	public ArrayList<Tuple> getSuccessors(State st) {
 		// I assumed that when agent is in horizontal orientation, its location is represented by the left cell
 		// and when agent is in vertical orientation, its location is represented by the upper cell
+		int r = st.getR_coord();
+		int c = st.getC_coord();
+		int orient = st.getOrientation();
 
 		ArrayList<Tuple> successors = new ArrayList<>();
-		if(orient == Tuple.Orientation.S.ordinal()){
-			if(c>1 && map[r][c-2] == 1 && map[r][c-1] == 1){
-				successors.add(new Tuple(r,c-2,Tuple.Orientation.H,1,'L'));
+		if (orient == Tuple.Orientation.S.ordinal()) {
+			if (c > 1 && map[r][c - 2] == 1 && map[r][c - 1] == 1) {
+				successors.add(new Tuple(r, c - 2, Tuple.Orientation.H, 1, 'L', st));
 			}
-			if(r>1 && map[r-2][c] == 1 && map[r-1][c] == 1){
-				successors.add(new Tuple(r-2,c,Tuple.Orientation.V,1,'U'));
+			if (r > 1 && map[r - 2][c] == 1 && map[r - 1][c] == 1) {
+				successors.add(new Tuple(r - 2, c, Tuple.Orientation.V, 1, 'U',st));
 			}
-			if(c<col-2 && map[r][c+2] == 1 && map[r][c+1] == 1){
-				successors.add(new Tuple(r,c+1,Tuple.Orientation.H,1,'R'));
+			if (c < col - 2 && map[r][c + 2] == 1 && map[r][c + 1] == 1) {
+				successors.add(new Tuple(r, c + 1, Tuple.Orientation.H, 1, 'R',st));
 			}
-			if(r<row-2 && map[r+2][c] == 1 && map[r+1][c] == 1){
-				successors.add(new Tuple(r+1,c,Tuple.Orientation.V,1,'D'));
+			if (r < row - 2 && map[r + 2][c] == 1 && map[r + 1][c] == 1) {
+				successors.add(new Tuple(r + 1, c, Tuple.Orientation.V, 1, 'D',st));
 			}
-		}else if(orient == Tuple.Orientation.H.ordinal()){
-			if(c>0 && map[r][c-1] == 1){
-				successors.add(new Tuple(r,c-1,Tuple.Orientation.S,3,'L'));
+		} else if (orient == Tuple.Orientation.H.ordinal()) {
+			if (c > 0 && map[r][c - 1] == 1) {
+				successors.add(new Tuple(r, c - 1, Tuple.Orientation.S, 3, 'L',st));
 			}
-			if(r>0 && map[r-1][c] == 1 && map[r-1][c+1] == 1){
-				successors.add(new Tuple(r-1,c,Tuple.Orientation.H,1,'U'));
+			if (r > 0 && map[r - 1][c] == 1 && map[r - 1][c + 1] == 1) {
+				successors.add(new Tuple(r - 1, c, Tuple.Orientation.H, 1, 'U',st));
 			}
-			if(c<col-2 && map[r][c+2] == 1){
-				successors.add(new Tuple(r,c+2,Tuple.Orientation.S,3,'R'));
+			if (c < col - 2 && map[r][c + 2] == 1) {
+				successors.add(new Tuple(r, c + 2, Tuple.Orientation.S, 3, 'R',st));
 			}
-			if(r<row-1 && map[r+1][c] == 1 && map[r+1][c+1] == 1){
-				successors.add(new Tuple(r+1,c,Tuple.Orientation.H,1,'D'));
+			if (r < row - 1 && map[r + 1][c] == 1 && map[r + 1][c + 1] == 1) {
+				successors.add(new Tuple(r + 1, c, Tuple.Orientation.H, 1, 'D',st));
 			}
-		}else if(orient == Tuple.Orientation.V.ordinal()){
-			if(c>0 && map[r][c-1] == 1 && map[r+1][c-1] == 1){
-				successors.add(new Tuple(r,c-1,Tuple.Orientation.V,1,'L'));
+		} else if (orient == Tuple.Orientation.V.ordinal()) {
+			if (c > 0 && map[r][c - 1] == 1 && map[r + 1][c - 1] == 1) {
+				successors.add(new Tuple(r, c - 1, Tuple.Orientation.V, 1, 'L',st));
 			}
-			if(r>0 && map[r-1][c] == 1){
-				successors.add(new Tuple(r-1,c,Tuple.Orientation.S,3,'U'));
+			if (r > 0 && map[r - 1][c] == 1) {
+				successors.add(new Tuple(r - 1, c, Tuple.Orientation.S, 3, 'U',st));
 			}
-			if(c<col-1 && map[r][c+1] == 1 && map[r+1][c+1] == 1){
-				successors.add(new Tuple(r,c+1,Tuple.Orientation.V,1,'R'));
+			if (c < col - 1 && map[r][c + 1] == 1 && map[r + 1][c + 1] == 1) {
+				successors.add(new Tuple(r, c + 1, Tuple.Orientation.V, 1, 'R',st));
 			}
-			if(r<row-2 && map[r+2][c] == 1){
-				successors.add(new Tuple(r+2,c,Tuple.Orientation.S,3,'D'));
+			if (r < row - 2 && map[r + 2][c] == 1) {
+				successors.add(new Tuple(r + 2, c, Tuple.Orientation.S, 3, 'D',st));
 			}
 		}
-
 		return successors;
+	}
+
+	public boolean checkGoalState(State st) {
+		return st.getR_coord() == goalState[0] && st.getC_coord() == goalState[1] && st.getOrientation() == Tuple.Orientation.S.ordinal();
 	}
 
 }

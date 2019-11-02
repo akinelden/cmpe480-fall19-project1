@@ -1,4 +1,6 @@
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Main {
 	public static void main(String[] args) {
@@ -6,7 +8,13 @@ public class Main {
 		String method = "dfs"; // TODO: remove them
 
 		Puzzle puzzle = createPuzzle(level);
+
+		// TODO: remove below
+		//testPuzzle(puzzle);
+
 		Graph graph = new Graph(puzzle);
+		graph.BFS();
+		//graph.DFS();
 		switch (method) {
 			case "dfs":
 				graph.DFS();
@@ -27,14 +35,33 @@ public class Main {
 
 	}
 
+	// TODO: remove that test function
+	private static void testPuzzle(Puzzle puzzle) {
+		while (true) {
+			try {
+				System.out.println("Enter coordinates and orientation:");
+				Scanner scanner = new Scanner(System.in);
+				String s = scanner.nextLine();
+				String[] coords = s.split(" ");
+				State st = new State(Integer.parseInt(coords[0]), Integer.parseInt(coords[1]), Integer.parseInt(coords[2]));
+				ArrayList<Tuple> successors = puzzle.getSuccessors(st);
+				for (Tuple suc : successors) {
+					suc.printTuple();
+				}
+			} catch (Exception ex1) {
+				System.out.println("Wrong input given!");
+			}
+		}
+	}
+
 	private static Puzzle createPuzzle(String level) {
 		String[] map;
 		int row, col;
 		try (BufferedReader reader = new BufferedReader(new FileReader(level))) {
 			String line = reader.readLine();
 			String[] parts = line.split(" ");
-			row = Integer.parseInt(parts[0]);
-			col = Integer.parseInt(parts[1]);
+			col = Integer.parseInt(parts[0]);
+			row = Integer.parseInt(parts[1]);
 			map = new String[row];
 			for (int i = 0; i < row; i++) {
 				line = reader.readLine();
