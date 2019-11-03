@@ -1,13 +1,9 @@
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Scanner;
 
 public class Main {
 	public static void main(String[] args) {
-		String level = args[0]; // TODO: remove them
-		//String level = "levels/level1.txt"; // TODO: remove them
-		String method = args[1]; // TODO: remove them
-		//String method = "bfs"; // TODO: remove them
+		String level = args[0];
+		String method = args[1];
 
 		Puzzle puzzle = createPuzzle(level);
 

@@ -5,6 +5,12 @@ public class Puzzle {
 	private int row, col;
 	private int[][] map;
 
+	/**
+	 * Initialization of the puzzle map
+	 * @param _row
+	 * @param _col
+	 * @param _map
+	 */
 	public Puzzle(int _row, int _col, String[] _map) {
 		row = _row;
 		col = _col;
@@ -40,6 +46,11 @@ public class Puzzle {
 		return goalState;
 	}
 
+	/**
+	 * Gets the valid successor state nodes of a given state looking at its row, column and orientation
+	 * @param st The current state given as input
+	 * @return ArrayList of successor valid state nodes
+	 */
 	public ArrayList<Node> getSuccessors(State st) {
 		// I assumed that when agent is in horizontal orientation, its location is represented by left occupied cell
 		// and when agent is in vertical orientation, its location is represented by upper occupied cell
@@ -47,6 +58,7 @@ public class Puzzle {
 		int c = st.getC_coord();
 		int orient = st.getOrientation();
 
+		// I generated successors according to the orientation of the current state
 		ArrayList<Node> successors = new ArrayList<>();
 		if (orient == Node.Orientation.S.ordinal()) {
 			if (c > 1 && map[r][c - 2] == 1 && map[r][c - 1] == 1) {
